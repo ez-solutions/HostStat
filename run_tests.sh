@@ -1,0 +1,1 @@
+python test_stats.py  ./tests/test_hosts.txt ./tests/test_instances.txt
