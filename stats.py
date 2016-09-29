@@ -8,6 +8,7 @@ def read_file(filename):
     """
     Read a given file in the current directory
     """
+    print "Reading {} ...".format(filename)
     with open(filename) as f:
         # Read file content and remove spaces and EOL
         try:
@@ -28,6 +29,7 @@ def read_file(filename):
 def create_host_report(hosts):
     """
     """
+    print "Creating a host report ..."
     host_report = {}
     for host in hosts:
         host_id = host[0]
@@ -46,6 +48,7 @@ def create_host_report(hosts):
 def create_customer_report(host_report, instances):
     """
     """
+    print "Create a customer report ..."
     customer_report = {}
     # customer_ids = get_customer_ids(instances)
     for instance in instances:
@@ -92,6 +95,7 @@ def create_customer_report(host_report, instances):
 def get_largest_fraction(customer_report):
     """
     """
+    print "Calculating fractions ..."
     # Calculate the customer with the largest instance fraction on a single host
     max_fraction_host = [0.0]
     max_fraction_dc = [0.0]
@@ -135,6 +139,7 @@ def get_largest_fraction(customer_report):
 def get_available_hosts(host_report):
     """
     """
+    print "Finding hosts with available slots ..."
     available_hosts = []
     for host_id, status in host_report.iteritems():
         if int(status['slots']) - len(status['instances']) >= 1:
@@ -151,6 +156,7 @@ def write_stats_file(max_fraction_host, max_fraction_dc, available_hosts):
     |   AvailableHosts:<hostID_1>,<hostID_2>,...                                                                       |
     --------------------------------------------------------------------------------------------------------------------
     """
+    print "Writing output file: {}".format("Statistics.txt")
     f = open('Statistics.txt', 'w')
     f.write('HostClustering:')
     for customer_id, fraction in max_fraction_host.iteritems():
@@ -168,16 +174,9 @@ def write_stats_file(max_fraction_host, max_fraction_dc, available_hosts):
     f.close()
 
 if __name__ == '__main__':
-    hosts_file = ''
-    instances_file = ''
-    if len(sys.argv) < 3:
-        hosts_file = 'HostState.txt'
-        instances_file = 'InstanceState.txt'
-    elif len(sys.argv) == 3:
-        hosts_file = sys.argv[1] 
-        instances_file = sys.argv[2]
-    else:
-        raise Exception('Insufficient parametes.')
+
+    hosts_file = 'HostState.txt'
+    instances_file = 'InstanceState.txt'
     
     hosts = read_file(hosts_file)
     instances = read_file(instances_file)
@@ -186,9 +185,6 @@ if __name__ == '__main__':
     customer_report = create_customer_report(host_report, instances)
     largest_fraction_host, largest_fraction_dc = get_largest_fraction(customer_report)
     available_hosts = get_available_hosts(host_report)
-    
-    print dumps(largest_fraction_host, indent=4)
-    print dumps(largest_fraction_dc, indent=4)
-    print dumps(available_hosts, indent=4)
-
     write_stats_file(largest_fraction_host, largest_fraction_dc, available_hosts)
+    print "Done"
+    print "Please refer to the results in Statistics.txt "
