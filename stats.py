@@ -109,7 +109,7 @@ def get_largest_fraction(customer_report):
             elif fraction_host == max_fraction_host[-1]:
                 max_fraction_host.append(fraction_host)
                 max_customer_host.append(customer_id)
-        # Customer has largest fraction
+        # Customer has largest fraction of instance n a datacentre
         for dc_id, instances_on_dc in customer['datacentres'].iteritems():
             fraction_dc = float(len(instances_on_dc)) / float(total_instances)
             if fraction_dc > max_fraction_dc[-1]:
