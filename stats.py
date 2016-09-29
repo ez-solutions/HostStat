@@ -28,6 +28,14 @@ def read_file(filename):
 
 def create_host_report(hosts):
     """
+    Create host stats for every host as following:
+    {
+        'host_id': {
+            'slots': 'total number of slots on this host'
+            'instances': 'total number of instances on this host across all customers, updated when create customer report'
+            'datacentre': 'datacenter id that the host resites'
+        }
+    }
     """
     print "Creating a host report ..."
     host_report = {}
@@ -47,6 +55,18 @@ def create_host_report(hosts):
 
 def create_customer_report(host_report, instances):
     """
+    Create report on instaces and host for every customer as following template:
+    {
+        'customer_id': {
+            'instance_ids': [],         # total instances this customer owns
+            'hosts': {
+                'host_id': []           # instances on this host
+            },
+            'datacentres': {
+                'datacentre_id': []     # instances on this datacentre
+            }
+        }
+    }
     """
     print "Create a customer report ..."
     customer_report = {}
@@ -94,6 +114,13 @@ def create_customer_report(host_report, instances):
 
 def get_largest_fraction(customer_report):
     """
+    Find the largest fraction of instances per host of a customer: 
+        a customer's instances on a HOST / total fleet of instances of the customer
+
+    Find the largest fraction of instances per datacentre of a customer:
+        a customer's instances on a DATACENTRE / total fleet of instances of the customer
+    
+    PS: if there are equal largest fractions found in either case, they all will be considered.
     """
     print "Calculating fractions ..."
     # Calculate the customer with the largest instance fraction on a single host
@@ -138,6 +165,9 @@ def get_largest_fraction(customer_report):
 
 def get_available_hosts(host_report):
     """
+    Find the hosts that at least have one available slot.
+    By calculating the difference between the number of total instances on the host and total number of slots of the host,
+    if the difference >= 1, the host is available.
     """
     print "Finding hosts with available slots ..."
     available_hosts = []
