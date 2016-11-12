@@ -7,9 +7,10 @@ from bson.json_util import dumps
 
 import stats 
 
-def test_read_file(file_name):
+def test_read_file():
     """
     """
+    file_name = "./tests/test_hosts.txt"
     expected_results = [
         ['2','4','0'],
         ['5','4','0'],
